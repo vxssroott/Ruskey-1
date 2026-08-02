@@ -1,79 +1,101 @@
-![CleanShot 2025-03-08 at 16 57 34@2x](https://github.com/user-attachments/assets/92e15a16-dcc9-45b3-9c5a-93fc98e06b58)
+# Ruskey
 
-A implementation of the Monkey programming language interpreter in Rust, based on the book "Writing An Interpreter In Go" by Thorsten Ball.
+![License](https://img.shields.io/github/license/vxssroott/Ruskey-1)
+![GitHub stars](https://img.shields.io/github/stars/vxssroott/Ruskey-1?style=social)
+![Repo size](https://img.shields.io/github/repo-size/vxssroott/Ruskey-1)
+![Rust](https://img.shields.io/badge/rust-1.70%2B-orange)
 
-## About
+> A Rust implementation of the Monkey programming language interpreter (inspired by "Writing An Interpreter In Go" by Thorsten Ball).
 
-Ruskey is Rust implementation of the Monkey programming language introduced in the book "Writing An Interpreter In Go". This project serves as both a learning exercise for Rust and interpreter design.
+Table of contents
+- About
+- Badges
+- Features
+- Project structure
+- Quick start
+- Examples
+- Library overview
+- Tests
+- Contributing
+- License
 
-The Monkey language features:
+About
 
-- C-like syntax
-- Variable bindings
-- Integer and boolean data types
-- Arithmetic expressions
-- Built-in functions
-- First-class and higher-order functions
-- Closures
-- String data structure
-- Array data structure
-- Hash data structure
+Ruskey is an educational interpreter for the Monkey programming language written in Rust. The goal of this project is to follow the designs and exercises in Thorsten Ball's "Writing An Interpreter In Go" while exploring idiomatic Rust, ownership, and type design for interpreters.
 
-## Project Structure
+Badges
+
+- License: MIT
+- GitHub stars and repo size
+- Rust toolchain indicator
+
+Features
+
+- Lexer: Tokenizes Monkey source code including strings, identifiers, numbers, operators and delimiters.
+- Parser: Recursive-descent parser with Pratt-style expression handling.
+- AST: Types representing statements and expressions.
+- Evaluator: Walks the AST and evaluates Monkey programs.
+- Object system: First-class values (integers, booleans, strings, arrays, hashes, functions).
+- Environment: Lexical scoping for variables and closures.
+- REPL: Read–Eval–Print Loop for interactive experimentation.
+
+Project structure
 
 ```
 ruskey/
 ├── src/
 │   ├── token.rs       # Token definitions
 │   ├── lexer.rs       # Lexical analyzer
-│   ├── ast.rs         # Abstract Syntax Tree
-│   ├── parser.rs      # Parser
-│   ├── object.rs      # Object system
-│   ├── environment.rs # Environment for variable bindings
-│   ├── evaluator.rs   # AST evaluator
+│   ├── ast.rs         # Abstract Syntax Tree (AST) nodes
+│   ├── parser.rs      # Parser converting tokens to AST
+│   ├── object.rs      # Object/value system for the interpreter
+│   ├── environment.rs # Environment for variable bindings and scopes
+│   ├── evaluator.rs   # AST evaluator / interpreter
 │   ├── repl.rs        # Read-Eval-Print Loop
-│   └── lib.rs         # Library exports
+│   ├── builtins.rs    # Built-in functions (if any)
+│   └── lib.rs         # Library exports and module declarations
 ├── tests/             # Test suite
 └── Cargo.toml         # Project configuration
 ```
 
-## Features
+(If a file listed above is missing, check the `src/` directory — the README reflects the intended structure.)
 
-- **Lexer**: Tokenizes Monkey source code
-- **Parser**: Recursive descent parser with Pratt parsing for expressions
-- **AST**: Represents the structure of Monkey programs
-- **Evaluator**: Interprets and evaluates Monkey code
-- **Object System**: Represents values and objects in Monkey
-- **Environment**: Tracks variable bindings and scopes
-- **REPL**: Interactive shell for experimenting with Monkey
+Quick start
 
-## Progress
+Requirements
+- Rust toolchain (rustc + cargo), recommended Rust 1.70+.
 
-- [x] Lexer implementation
-- [x] Parser implementation
-- [x] AST evaluator
-- [x] Object system
-- [x] Environment
-- [x] Function evaluation
-- [x] REPL
-
-## Building and Running
+Build
 
 ```bash
-# Build the project
-cargo build
+# clone
+git clone https://github.com/vxssroott/Ruskey-1.git
+cd Ruskey-1
 
-# Run tests
+# build
+cargo build --release
+```
+
+Run tests
+
+```bash
 cargo test
+```
 
-# Run the REPL
+Run the REPL
+
+```bash
+cargo run --release
+# or for development
 cargo run
 ```
 
-## Example Code
+Examples
 
-```
-// Define a function
+Basic function and recursion (Monkey source):
+
+```monkey
+// Define fibonacci function
 let fibonacci = fn(x) {
   if (x == 0) {
     return 0;
@@ -86,17 +108,56 @@ let fibonacci = fn(x) {
   }
 };
 
-// Call the function
 fibonacci(10);
 ```
 
-## Learning Resources
+Repl usage
 
-If you're interested in learning more about interpreters or following along with this project:
+- Start the REPL with `cargo run` and type Monkey expressions to evaluate them.
+- Use `let` to bind variables and `fn` to declare functions.
 
-1. ["Writing An Interpreter In Go"](https://interpreterbook.com/) by Thorsten Ball
-2. ["Crafting Interpreters"](https://craftinginterpreters.com/) by Bob Nystrom
+Library overview
 
-## License
+- token.rs: TokenType and Token helpers and keyword lookup.
+- lexer.rs: Lexer struct that produces Token values from input bytes. It supports strings, identifiers, numbers (integers), and operators, including multi-character operators like `==` and `!=`.
+- ast.rs: (AST node types) program, statements, and expression node definitions.
+- parser.rs: Implements a Pratt parser with prefix and infix parsing functions and precedence handling. The parser constructs the AST from a token stream.
+- object.rs / evaluator.rs: The runtime representation of values and the evaluator that executes AST nodes.
+- environment.rs: Implements scoped variable bindings used by the evaluator.
+- repl.rs: Simple loop reading input, parsing and evaluating, printing results.
 
-This project is open source and available under the [MIT License](LICENSE).
+Tests
+
+Run `cargo test`. The `tests/` directory contains integration and unit tests exercising lexer, parser, and evaluator behavior.
+
+Contributing
+
+Contributions are welcome. Typical ways to contribute:
+
+- Open an issue describing a bug or feature request.
+- Send a pull request with a focused change and tests.
+
+Guidelines
+
+- Keep changes small and focused.
+- Add tests for new features or bug fixes.
+- Follow Rust formatting rules (run `cargo fmt`) and clippy checks (`cargo clippy`).
+
+Suggested improvements
+
+- Add CI (GitHub Actions) for building and running tests on push/PR.
+- Add more built-in functions and standard library features.
+- Add documentation comments (rustdoc) to public APIs and publish crates.io package if desired.
+
+License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+Acknowledgements
+
+- The architecture and exercises are heavily inspired by "Writing An Interpreter In Go" by Thorsten Ball.
+
+Contact
+
+GitHub: https://github.com/vxssroott
+
