@@ -2,5 +2,15 @@
 name = "ruskey"
 version = "0.1.0"
 edition = "2021"
+authors = ["vxssroott <vossnetwork302@gmail.com>"]
+description = "A Rust interpreter implementation of the Monkey programming language (educational)."
+license = "MIT"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/vxssroott/Ruskey-1"
+homepage = ""
+keywords = ["interpreter", "monkey", "language", "rust"]
+categories = ["programming-languages"]
 
 [dependencies]
+
